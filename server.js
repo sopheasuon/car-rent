@@ -22,8 +22,6 @@ app.use('/api/locations', locations);
 app.use('/api/rentals', rentals);
 app.use('/api/reservations', reservations);
 
-
-
 // async function queryDatabase() {
 //   try {
 //     const customers = await pool.query('SELECT * FROM Customers'); 
