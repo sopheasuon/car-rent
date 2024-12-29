@@ -1,5 +1,6 @@
 const express = require('express');
 const pool = require('../db');
+const bcrypt = require('bcryptjs');
 const customersRouter = express.Router();
 
 customersRouter.get('/', async (req, res) => {
@@ -33,12 +34,17 @@ customersRouter.post('/create', async (req, res) => {
       address, 
       phone, 
       email, 
-      driver_license 
+      driver_license,
+      password,
     } = req.body;
 
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const newCustomer = await pool.query(
-      'INSERT INTO Customers (customer_id, first_name, last_name, address, phone, email, driver_license) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [customer_id, first_name, last_name, address, phone, email, driver_license]
+      `INSERT INTO Customers (customer_id, first_name, last_name, address, phone, email, driver_license, password) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [customer_id, first_name, last_name, address, phone, email, driver_license, hashedPassword]
     );
 
     res.status(200).json({
@@ -60,14 +66,15 @@ customersRouter.put("/update", async (req, res) => {
       address, 
       phone, 
       email, 
-      driver_license 
+      driver_license,
+      password
     } = req.body;
 
     const customer_id = parseInt(req.query.customer_id);
 
     const updatedCustomer = await pool.query(
-      'UPDATE Customers SET first_name =?, last_name =?, address =?, phone =?, email =?, driver_license =? WHERE customer_id =?',
-      [first_name, last_name, address, phone, email, driver_license, customer_id]
+      'UPDATE Customers SET first_name =?, last_name =?, address =?, phone =?, email =?, driver_license =? , password =? WHERE customer_id =?',
+      [first_name, last_name, address, phone, email, driver_license, password, customer_id]
     );
 
     res.status(200).json({

@@ -4,7 +4,12 @@ const RentalsRouter = express.Router();
 
 RentalsRouter.get("/", async(req, res) => {
   try {
-    const rentals = await pool.query("SELECT * FROM Rentals");
+    const rentals = await pool.query(
+      `
+        SELECT * FROM Rentals r 
+        INNER JOIN Customers c ON r.customer_id = c.customer_id
+        INNER JOIN Cars ca ON r.car_id = ca.car_id
+      `);
     return res.json(rentals[0]);
   } catch (err) {
     console.error(err);

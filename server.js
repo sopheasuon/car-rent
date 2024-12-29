@@ -5,6 +5,7 @@ const cars = require('./controllers/cars');
 const locations = require('./controllers/locations');
 const rentals = require('./controllers/rentals');
 const reservations = require('./controllers/reservations');
+const login = require('./controllers/login');
 
 const app = express(); 
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use('/api/cars', cars);
 app.use('/api/locations', locations);
 app.use('/api/rentals', rentals);
 app.use('/api/reservations', reservations);
+app.use('/api/login', login);
 
 // async function queryDatabase() {
 //   try {
